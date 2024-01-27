@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>Tom Lee</Authors>
+    <Copyright>TomLee@2024</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/NamNguyen09/plex-ui-components</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Version>8.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="UIComponents\Image.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspose.Cells" Version="18.8.0" />
+    <PackageReference Include="Aspose.PDF" Version="18.8.0" />
+    <PackageReference Include="Aspose.Slides.NET" Version="18.8.0" />
+    <PackageReference Include="Aspose.Words" Version="18.8.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CXChart">
+      <HintPath>..\Libraries\CXChart.dll</HintPath>
+    </Reference>
+    <Reference Include="DundasWebChart">
+      <HintPath>..\Libraries\DundasWebChart.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
