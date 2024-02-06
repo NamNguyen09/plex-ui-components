@@ -2,21 +2,18 @@
 
 namespace Plex.UIComponents.UIComponents;
 
-/// <summary>
-/// Class TextBlock.
-/// </summary>
 [Serializable]
 public class TextBlock : BaseUIComponent
 {
     #region Fields
-    public Dictionary<string, string> Attributes = new Dictionary<string, string>();
-    public string CssClass = string.Empty;
-    public string DivId = string.Empty;
-    public string HtmlElement = "div";
-    public bool IsBold;
-    public bool IsUnderLine;
-    public IList<BaseUIComponent> Items = new List<BaseUIComponent>();
-    public string Text = string.Empty;
+    public Dictionary<string, string> Attributes { get; set; } = [];
+    public string CssClass { get; set; } = string.Empty;
+    public string DivId { get; set; } = string.Empty;
+    public string HtmlElement { get; set; } = "div";
+    public bool IsBold { get; set; }
+    public bool IsUnderLine { get; set; }
+    public IList<BaseUIComponent> Items { get; set; } = [];
+    public string Text { get; set; } = string.Empty;
     //public GenericFormDto GenericForm;
     #endregion
 
@@ -135,7 +132,7 @@ public class TextBlock : BaseUIComponent
     ////    PptAddCell(presentation, oTable, 0, 0, text, pageWidth, documentItem, "");
     ////    yPos += oTable.Height + 100;
     ////}
-  
+
 
     ////public void ToPpt(Presentation presentation, Aspose.Slides.Table pptTable, int rowIndex, int columnIndex, double width, DocumentItemDto documentItem, string backColor)
     ////{
@@ -166,7 +163,7 @@ public class TextBlock : BaseUIComponent
     ////    }
     ////}
 
-   
+
     ////public void ToPpt(Presentation presentation, Slide slide, ref double yCurrentPos, double docWidth, ICollection<DocumentItemDto> docItems, double yStartPos)
     ////{
     ////    if (Attributes.ContainsKey("type") && (Attributes["type"].ToLower() == "radio" || Attributes["type"].ToLower() == "checkbox") && Attributes.ContainsKey("checked"))

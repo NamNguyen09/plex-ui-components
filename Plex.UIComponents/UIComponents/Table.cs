@@ -1,19 +1,21 @@
 ﻿using System.Text;
+using Aspose.Words;
+using Plex.UIComponents.Dtos;
 
 namespace Plex.UIComponents.UIComponents;
 
 [Serializable]
 public class Table : BaseUIComponent
 {
-    public string CssClass = "";
-    public List<Column> Columns = [];
-    public List<Row> Rows = [];
-    public Dictionary<string, string> Attributes = [];
-    public string PreTableHtml = "";
-    public string PostTableHtml = "";
-    public bool InsertLineBreak = true;
-    public int LeftIndent = 0;
-    public double PreferredWidthPx = -1;
+    public string CssClass { get; set; } = "";
+    public List<Column> Columns { get; set; } = [];
+    public List<Row> Rows { get; set; } = [];
+    public Dictionary<string, string> Attributes { get; set; } = [];
+    public string PreTableHtml { get; set; } = "";
+    public string PostTableHtml { get; set; } = "";
+    public bool InsertLineBreak { get; set; } = true;
+    public int LeftIndent { get; set; } = 0;
+    public double PreferredWidthPx { get; set; } = -1;
     public bool IsKeepTableFromBreakingAcrossPages { get; set; }
 
     public override string ToHtml()
@@ -75,63 +77,63 @@ public class Table : BaseUIComponent
         }
         return oRet;
     }
-    ////public void ToWord(DocumentBuilder documentBuilder, double pageWidth, ICollection<DocumentItemDto> docItems, int format)
-    ////{
-    ////    var defaultColWidth = 80;
-    ////    const int minColWidth = 50;
-    ////    int index;
-    ////    //Calculate auto-width columns without specific width
-    ////    var autoColumns = 0;
-    ////    var width = pageWidth;
-    ////    var columnWidths = new double[Columns.Count];
-    ////    foreach (var col in Columns)
-    ////    {
-    ////        if (col.Width == 0)
-    ////            autoColumns += 1;
-    ////        else
-    ////            width -= col.Width;
-    ////    }
-    ////    if (Columns.Count < 3)
-    ////    {
-    ////        defaultColWidth = 120;
-    ////    }
-    ////    if (width < Convert.ToDouble(autoColumns * minColWidth) && autoColumns > 0)
-    ////    {
-    ////        for (index = 0; index <= Columns.Count - 1; index++)
-    ////        {
-    ////            if (Columns[index].Width != 0) continue;
-    ////            columnWidths[index] = defaultColWidth;
-    ////            width -= defaultColWidth;
-    ////            Columns[index].Width = defaultColWidth;
-    ////            if (!(index == 0 & format == 1)) continue;
-    ////            columnWidths[index] += 10;
-    ////            width -= 10;
-    ////            Columns[index].Width += 10;
-    ////        }
-    ////    }
-    ////    if (width < 0)
-    ////    {
-    ////        var factor = pageWidth / (pageWidth + Math.Abs(width));
-    ////        for (index = 0; index <= Columns.Count - 1; index++)
-    ////        {
-    ////            Columns[index].Width = Convert.ToInt32(Columns[index].Width * factor);
-    ////        }
-    ////    }
-    ////    for (index = 0; index <= Columns.Count - 1; index++)
-    ////    {
-    ////        if (Columns[index].Width == 0)
-    ////            columnWidths[index] = width / autoColumns;
-    ////        else
-    ////            columnWidths[index] = Columns[index].Width;
-    ////    }
-    ////    documentBuilder.StartTable();
-    ////    foreach (var oRow in Rows)
-    ////    {
-    ////        oRow.ToWord(documentBuilder, pageWidth, docItems, columnWidths, format);
-    ////    }
-    ////    documentBuilder.EndTable();
-    ////    documentBuilder.InsertBreak(BreakType.LineBreak);
-    ////}
+    public void ToWord(DocumentBuilder documentBuilder, double pageWidth, ICollection<DocumentItemDto> docItems, int format)
+    {
+        var defaultColWidth = 80;
+        const int minColWidth = 50;
+        int index;
+        //Calculate auto-width columns without specific width
+        var autoColumns = 0;
+        var width = pageWidth;
+        var columnWidths = new double[Columns.Count];
+        foreach (var col in Columns)
+        {
+            if (col.Width == 0)
+                autoColumns += 1;
+            else
+                width -= col.Width;
+        }
+        if (Columns.Count < 3)
+        {
+            defaultColWidth = 120;
+        }
+        if (width < Convert.ToDouble(autoColumns * minColWidth) && autoColumns > 0)
+        {
+            for (index = 0; index <= Columns.Count - 1; index++)
+            {
+                if (Columns[index].Width != 0) continue;
+                columnWidths[index] = defaultColWidth;
+                width -= defaultColWidth;
+                Columns[index].Width = defaultColWidth;
+                if (!(index == 0 & format == 1)) continue;
+                columnWidths[index] += 10;
+                width -= 10;
+                Columns[index].Width += 10;
+            }
+        }
+        if (width < 0)
+        {
+            var factor = pageWidth / (pageWidth + Math.Abs(width));
+            for (index = 0; index <= Columns.Count - 1; index++)
+            {
+                Columns[index].Width = Convert.ToInt32(Columns[index].Width * factor);
+            }
+        }
+        for (index = 0; index <= Columns.Count - 1; index++)
+        {
+            if (Columns[index].Width == 0)
+                columnWidths[index] = width / autoColumns;
+            else
+                columnWidths[index] = Columns[index].Width;
+        }
+        documentBuilder.StartTable();
+        foreach (var oRow in Rows)
+        {
+            oRow.ToWord(documentBuilder, pageWidth, docItems, columnWidths, format);
+        }
+        documentBuilder.EndTable();
+        documentBuilder.InsertBreak(BreakType.LineBreak);
+    }
     ////public void ToPpt(Presentation presentation, ref Slide slide, double pageWidth, ref double yPos,
     ////                  ICollection<DocumentItemDto> docItems, double yStartPosition)
     ////{

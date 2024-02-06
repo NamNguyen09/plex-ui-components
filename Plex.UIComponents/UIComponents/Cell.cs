@@ -9,47 +9,43 @@ using Paragraph = Aspose.Words.Paragraph;
 
 namespace Plex.UIComponents.UIComponents;
 
-
 [Serializable]
 public class Cell : BaseUIComponent
 {
-    public AsposeCellAlign Align = AsposeCellAlign.Undefined;
-    public Dictionary<string, string> Attributes = new Dictionary<string, string>();
-    public IList<BaseUIComponent> Items = new List<BaseUIComponent>();
-    public AsposeCellVerticalAlign VerticalAlign = AsposeCellVerticalAlign.Middle;
-    public bool Calculated;
-    public bool Navigation;
-    public bool RenderAsTableHead;
+    public AsposeCellAlign Align { get; set; } = AsposeCellAlign.Undefined;
+    public Dictionary<string, string> Attributes { get; set; } = [];
+    public IList<BaseUIComponent> Items { get; set; } = [];
+    public AsposeCellVerticalAlign VerticalAlign { get; set; } = AsposeCellVerticalAlign.Middle;
     public Row? Row { get; set; }
     public bool IsBold { get; set; }
     public int ColIndex { get; set; }
     public int Colspan { get; set; }
     public int Rowspan { get; set; }
-    public string CssClass { get; set; }
-    public string DocItemName { get; set; }
-    public string Text { get; set; }
-    public string Title { get; set; }
-    public string BackColor { get; set; }
-    public string ForeColor { get; set; }
-    public string ForeColorClass { get; set; }
+    public string? CssClass { get; set; }
+    public string? DocItemName { get; set; }
+    public string? Text { get; set; }
+    public string? Title { get; set; }
+    public string? BackColor { get; set; }
+    public string? ForeColor { get; set; }
+    public string? ForeColorClass { get; set; }
     public bool IsCalculated { get; set; }
     public bool IsNavigation { get; set; }
-    public string NavigateOnclick { get; set; }
+    public string? NavigateOnclick { get; set; }
     public bool IsRenderAsTableHead { get; set; }
     public int SortNo { get; set; }
     public bool SortDirection { get; set; }
     public bool Sortable { get; set; }
-    public Color BorderButtomColor { get; set; }
-    public Color BorderTopColor { get; set; }
-    public Color BorderRightColor { get; set; }
-    public Color BorderLeftColor { get; set; }
-    public Color FontColor { get; set; }
+    public Color? BorderButtomColor { get; set; }
+    public Color? BorderTopColor { get; set; }
+    public Color? BorderRightColor { get; set; }
+    public Color? BorderLeftColor { get; set; }
+    public Color? FontColor { get; set; }
     public double TopPadding { get; set; }
     public double BottomPadding { get; set; }
     public double Padding { get; set; }
     public double LeftPadding { get; set; }
     public double RightPadding { get; set; }
-    public LineSpacing LineSpacing { get; set; }
+    public LineSpacing? LineSpacing { get; set; }
 
     #region Constructors
     public Cell()
@@ -77,13 +73,15 @@ public class Cell : BaseUIComponent
         BorderRight = LineStyle.Single;
         FontColor = Color.Black;
     }
-    public Cell(string text, string title = "", AsposeCellAlign align = AsposeCellAlign.Undefined, string backColor = "",
+    public Cell(string text, string title = "", AsposeCellAlign align = AsposeCellAlign.Undefined,
+                string backColor = "",
                 string foreColor = "", string cssClass = "", int colspan = 1, int rowspan = 1,
                 string docItemName = "", bool bRenderAsTableHead = false, bool bCalculated = false, int sortNo = -1,
-        bool sortDirection = false, bool sortable = false, LineStyle borderBottom = LineStyle.Single,
-        LineStyle borderTop = LineStyle.Single,
-        LineStyle borderLeft = LineStyle.Single, LineStyle bordeRight = LineStyle.Single,
-        double topPadding = 0.0, double bottomPadding = 0.0)
+                bool sortDirection = false, bool sortable = false, LineStyle borderBottom = LineStyle.Single,
+                LineStyle borderTop = LineStyle.Single,
+                LineStyle borderLeft = LineStyle.Single,
+                LineStyle bordeRight = LineStyle.Single,
+                double topPadding = 0.0, double bottomPadding = 0.0)
     {
         BorderBottom = borderBottom;
         BorderTop = borderTop;
@@ -113,7 +111,6 @@ public class Cell : BaseUIComponent
         NavigateOnclick = "";
 
         ProcessBgAndForeColor();
-        ForeColorClass = ForeColorClass;
         BorderBottom = borderBottom;
 
         TopPadding = topPadding;
@@ -129,13 +126,13 @@ public class Cell : BaseUIComponent
         var sbCellContent = new StringBuilder();
         var isTitleTd = true;
 
-        if (Calculated)
+        if (IsCalculated)
         {
             //If BackColor.Length = 0 Then BackColor = "#FFFFFF"
 
-            if (ForeColor.Length == 0 & BackColor.Length > 0)
+            if (ForeColor?.Length == 0 & BackColor?.Length > 0)
             {
-                ForeColor = BackColor.GetForeColor();
+                ForeColor = BackColor?.GetForeColor();
                 ForeColorClass = BackColor.GetForeColorClass();
             }
 
@@ -144,13 +141,13 @@ public class Cell : BaseUIComponent
         }
         else
         {
-            if (BackColor.Length == 0 && ForeColor.Length == 0)
+            if (BackColor?.Length == 0 && ForeColor?.Length == 0)
             {
                 sbCellContent.Append(RenderCell());
             }
             else
             {
-                if (BackColor.Length > 0 && ForeColor.Length == 0)
+                if (BackColor?.Length > 0 && ForeColor?.Length == 0)
                 {
                     ForeColor = BackColor.GetForeColor();
                     ForeColorClass = BackColor.GetForeColorClass();
@@ -163,7 +160,7 @@ public class Cell : BaseUIComponent
         }
         if (isTitleTd)
         {
-            sRet = RenderTd(sbCellContent.ToString(), Title);
+            sRet = RenderTd(sbCellContent.ToString(), Title ?? "");
         }
         else
         {
@@ -173,50 +170,50 @@ public class Cell : BaseUIComponent
         return sRet;
     }
 
- 
-    ////public void ToWord(DocumentBuilder documentBuilder, double pageWidth, ICollection<DocumentItemDto> docItems, double[] widths, int index, int format)
-    ////{
-    ////    double dWidth;
-    ////    var documentItem = FindDocItem(docItems, DocItemName);
-    ////    if (Colspan == 1)
-    ////    {
-    ////        dWidth = widths[index];
-    ////    }
-    ////    else
-    ////    {
-    ////        dWidth = 0;
-    ////        for (var j = index; j <= index + Colspan - 1; j++)
-    ////        {
-    ////            if (widths.Length > j)
-    ////            {
-    ////                dWidth += widths[j];
-    ////            }
-    ////        }
-    ////    }
-    ////    var pptCellAlign = (int)(Align == AsposeCellAlign.Right ? ParagraphAlignment.Right : Align == AsposeCellAlign.Center ? ParagraphAlignment.Center : ParagraphAlignment.Left);
-    ////    var iVAlign = (int)(VerticalAlign == AsposeCellVerticalAlign.Undefined ? AsposeCellVerticalAlign.Middle : VerticalAlign);
-    ////    AddWordCell(documentBuilder, dWidth, (ParagraphAlignment)pptCellAlign, Text, documentItem, BackColor, ForeColor, vAlign: (ParagraphAlignment)iVAlign);
-    ////    foreach (var item in Items)
-    ////    {
-    ////        if (item == null) continue;
-    ////        if (item is TextBlock)
-    ////        {
-    ////            (item as TextBlock)?.ToWord(documentBuilder, pageWidth, docItems, format);
-    ////        }
-    ////        else if (item is Chart)
-    ////        {
-    ////            (item as Chart)?.ToWord(documentBuilder, pageWidth, docItems);
-    ////        }
-    ////        else if (item is Image)
-    ////        {
-    ////            (item as Image)?.ToWord(documentBuilder, pageWidth, docItems);
-    ////        }
-    ////        else if (item is Table)
-    ////        {
-    ////            (item as Table)?.ToWord(documentBuilder, dWidth, docItems, format);
-    ////        }
-    ////    }
-    ////}      
+
+    public void ToWord(DocumentBuilder documentBuilder, double pageWidth, ICollection<DocumentItemDto> docItems, double[] widths, int index, int format)
+    {
+        double dWidth;
+        DocumentItemDto? documentItem = FindDocItem(docItems, DocItemName ?? "");
+        if (Colspan == 1)
+        {
+            dWidth = widths[index];
+        }
+        else
+        {
+            dWidth = 0;
+            for (var j = index; j <= index + Colspan - 1; j++)
+            {
+                if (widths.Length > j)
+                {
+                    dWidth += widths[j];
+                }
+            }
+        }
+        var pptCellAlign = (int)(Align == AsposeCellAlign.Right ? ParagraphAlignment.Right : Align == AsposeCellAlign.Center ? ParagraphAlignment.Center : ParagraphAlignment.Left);
+        var iVAlign = (int)(VerticalAlign == AsposeCellVerticalAlign.Undefined ? AsposeCellVerticalAlign.Middle : VerticalAlign);
+        AddWordCell(documentBuilder, dWidth, (ParagraphAlignment)pptCellAlign, Text ?? "", documentItem, BackColor ?? "", ForeColor ?? "", vAlign: (ParagraphAlignment)iVAlign);
+        foreach (var item in Items)
+        {
+            if (item == null) continue;
+            ////if (item is TextBlock)
+            ////{
+            ////    (item as TextBlock)?.ToWord(documentBuilder, pageWidth, docItems, format);
+            ////}
+            ////else if (item is Chart)
+            ////{
+            ////    (item as Chart)?.ToWord(documentBuilder, pageWidth, docItems);
+            ////}
+            ////else if (item is Image)
+            ////{
+            ////    (item as Image)?.ToWord(documentBuilder, pageWidth, docItems);
+            ////}
+            if (item is Table)
+            {
+                (item as Table)?.ToWord(documentBuilder, dWidth, docItems, format);
+            }
+        }
+    }
 
     ////public void ToPpt(Presentation presentation, Slide slide, Aspose.Slides.Table pptTable, int rowIndex, ref int columnIndex, ICollection<DocumentItemDto> docItems, double[] widths)
     ////{
@@ -314,11 +311,11 @@ public class Cell : BaseUIComponent
     {
         var stringBuilder = new StringBuilder();
 
-        string sTag = RenderAsTableHead ? "th" : "td";
+        string sTag = IsRenderAsTableHead ? "th" : "td";
         stringBuilder.Append("<" + sTag);
-        if (CssClass.Length > 0 | Row.CellClass.Length > 0)
+        if (CssClass?.Length > 0 | Row?.CellClass.Length > 0)
         {
-            stringBuilder.Append(" class='" + (Row.CellClass.Length > 0 ? CssClass.Length > 0 ? Row.CellClass + " " + CssClass : Row.CellClass : CssClass) + "'");
+            stringBuilder.Append(" class='" + (Row?.CellClass.Length > 0 ? CssClass?.Length > 0 ? Row.CellClass + " " + CssClass : Row.CellClass : CssClass) + "'");
         }
         if (Colspan > 1)
             stringBuilder.Append(" colspan='" + Colspan + "'");
@@ -326,11 +323,11 @@ public class Cell : BaseUIComponent
             stringBuilder.Append(" rowspan='" + Rowspan + "'");
         if (sTitle.Length > 0)
             stringBuilder.Append(" title='" + sTitle.Replace("'", "&apos;") + "'");
-        if (!Calculated && BackColor.Length > 0 | ForeColor.Length > 0)
+        if (!IsCalculated && BackColor?.Length > 0 | ForeColor?.Length > 0)
         {
             stringBuilder.Append(" style='"
-                + (BackColor.Length > 0 ? "background-color:" + BackColor + "!important;" : "")
-                + (ForeColor.Length > 0 ? "color:" + ForeColor + "!important;" : "" + "'"));
+                + (BackColor?.Length > 0 ? "background-color:" + BackColor + "!important;" : "")
+                + (ForeColor?.Length > 0 ? "color:" + ForeColor + "!important;" : "" + "'"));
         }
         if ((int)Align > -1)
         {
@@ -387,18 +384,18 @@ public class Cell : BaseUIComponent
 
         //Start Div
         strBuilder.Append(string.Format("<div class='divCalcCell' style='background-color:{0};border-color:{1};'>",
-            BackColor, BackColor.GetColorAdjustBrightness(0.9)));
+            BackColor, BackColor?.GetColorAdjustBrightness(0.9)));
 
         //Left span
-        if (ForeColorClass.Length > 0)
+        if (ForeColorClass?.Length > 0)
         {
             strBuilder.Append(string.Format("<span class='calcCellText {0}' title='{1}'>",
-                ForeColorClass, Title.Replace("'", "&apos;")));
+                ForeColorClass, Title?.Replace("'", "&apos;")));
         }
-        else if (ForeColor.Length > 0)
+        else if (ForeColor?.Length > 0)
         {
             strBuilder.Append(string.Format("<span class='calcCellText' style='color:{0}' title='{1}'>",
-                ForeColor, Title.Replace("'", "&apos;")));
+                ForeColor, Title?.Replace("'", "&apos;")));
         }
         else
         {
@@ -432,7 +429,7 @@ public class Cell : BaseUIComponent
         if (Items.Count > 0)
         {
             var sInlineStyleBg = string.Format(" style='background-color:{0};'",
-                BackColor.GetColorAdjustBrightness(0.8));
+                BackColor?.GetColorAdjustBrightness(0.8));
             const string classCheckTrend = "'calcCellTrend'";
             const string classCheckSettings = "'editIcon'";
             const string classCheckN = "'calcCell_";
@@ -472,7 +469,7 @@ public class Cell : BaseUIComponent
             }
         }
 
-        if (Navigation)
+        if (IsNavigation)
         {
             iElementCount += 1;
             strBuilder.Append(string.Format("<span class='calcCellNavigate' onclick='{0}'>&nbsp;</span>", NavigateOnclick));
@@ -499,7 +496,7 @@ public class Cell : BaseUIComponent
     private string RenderCell()
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.Append(Navigation
+        stringBuilder.Append(IsNavigation
                                  ? string.Format("<a href='#' onclick='{0}'>{1}</a>", NavigateOnclick, Text)
                                  : Text);
         foreach (var item in Items)
@@ -513,9 +510,11 @@ public class Cell : BaseUIComponent
     public LineStyle BorderTop;
     public LineStyle BorderLeft;
     public LineStyle BorderRight;
-    private void AddWordCell(DocumentBuilder documentBuilder, double width, ParagraphAlignment align, string text, DocumentItemDto documentItem, string backColor = "",
+    private void AddWordCell(DocumentBuilder documentBuilder, double width, ParagraphAlignment align, string text,
+                            DocumentItemDto? documentItem, string backColor = "",
                             string foreColor = "", bool isTop = true, bool isBottom = true, string imgFile = "",
-                            bool isUseBorderColor = false, ParagraphAlignment vAlign = (ParagraphAlignment)CellVerticalAlignment.Center, string borderStyle = "")
+                            bool isUseBorderColor = false,
+                            ParagraphAlignment vAlign = (ParagraphAlignment)CellVerticalAlignment.Center, string borderStyle = "")
     {
         documentBuilder.InsertCell();
         documentBuilder.CellFormat.PreferredWidth = PreferredWidth.FromPoints(width);

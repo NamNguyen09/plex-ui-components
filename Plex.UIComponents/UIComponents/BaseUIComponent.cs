@@ -5,6 +5,7 @@ namespace Plex.UIComponents.UIComponents;
 [Serializable]
 public class BaseUIComponent
 {
+    public string Type => this.GetType().Name;
     public virtual string ToHtml()
     {
         return string.Empty;
@@ -150,7 +151,7 @@ public class BaseUIComponent
     ////    var fontIndex = presentation.Fonts.Add(font);
     ////    portion.FontIndex = fontIndex;
     ////}
-       
+
     ////public void AddTrendImg(Presentation presentation, Aspose.Slides.Cell cell, string trend)
     ////{
     ////    var pic = new PictureBullet(presentation, trend);
@@ -159,47 +160,23 @@ public class BaseUIComponent
     ////    cell.TextFrame.Paragraphs[0].BulletType = BulletType.Picture;
     ////    cell.TextFrame.Paragraphs[0].PictureBulletId = (short)picId;
     ////}
-
-    /// <summary>
-    /// Removes the js event.
-    /// </summary>
+    
     public virtual void RemoveJsEvent()
     {
         // Do nothing
     }
-
-    /// <summary>
-    /// Removes the tooltip.
-    /// </summary>
     public virtual void RemoveTooltip() { }
-
-    /// <summary>
-    /// Gets the width.
-    /// </summary>
-    /// <value>The width.</value>
     public virtual int BaseWidth
     {
         get { return 0; }
     }
-    /// <summary>
-    /// Gets the height.
-    /// </summary>
-    /// <value>The height.</value>
     public virtual int Height
     {
         get { return 0; }
     }
-    /// <summary>
-    /// Gets the content.
-    /// </summary>
-    /// <value>The content.</value>
-    public virtual Stream Content
+    public virtual Stream? Content
     {
         get { return null; }
     }
-
-    /// <summary>
-    /// The item id (general id)
-    /// </summary>
     public int ItemId { get; set; }
 }

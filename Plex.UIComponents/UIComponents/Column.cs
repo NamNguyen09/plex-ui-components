@@ -1,45 +1,18 @@
-﻿
-using System;
+﻿namespace Plex.UIComponents.UIComponents;
 
-namespace Plex.UIComponents.UIComponents
+/// </summary>
+[Serializable]
+public class Column : BaseUIComponent
 {
-    /// <summary>
-    /// Class Column.
-    /// </summary>
-    [Serializable]
-    public class Column : BaseUIComponent
+    public Column(int width = 0, string name = "", string cssClass = "", string unit = "px")
     {
-        /// <summary>
-        /// The width
-        /// </summary>
-        public int Width;
-        /// <summary>
-        /// The name
-        /// </summary>
-        public string Name = "";
-        /// <summary>
-        /// The CSS class
-        /// </summary>
-        public string CssClass = "";
-
-        /// <summary>
-        /// The Unit px or %
-        /// </summary>
-        public string Unit;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Column"/> class.
-        /// </summary>
-        /// <param name="width">The width.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="cssClass">The CSS class.</param>
-        /// <param name="unit">The unit</param>
-        public Column(int width = 0, string name = "", string cssClass = "", string unit = "px")
-        {
-            Name = name;
-            Width = width;
-            CssClass = cssClass;
-            Unit = unit;
-        }
+        Name = name;
+        Width = width;
+        CssClass = cssClass;
+        Unit = unit;
     }
+    public int Width { get; set; }
+    public string Name { get; set; } = "";
+    public string CssClass { get; set; } = "";
+    public string? Unit { get; set; }
 }

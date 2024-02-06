@@ -2,9 +2,8 @@
 
 namespace Plex.UIComponents.UIComponents;
 
-
 [Serializable]
-public class PortalPartContainer : BaseUIComponent
+public abstract class PortalPartContainer : BaseUIComponent
 {
     public bool IsRender { get; set; } = true;
     public string? AfterContentText { get; set; }
@@ -12,12 +11,22 @@ public class PortalPartContainer : BaseUIComponent
     public string? FooterText { get; set; }
     public string? HeaderText { get; set; }
     public int PortalPartId { get; set; }
-    public int PortalPartType { get; set; }
+    public int PortalPartTypeID { get; set; } = 1;
     public bool RenderName { get; set; }
     public string? TextAbove { get; set; }
     public string? TextBelow { get; set; }
     public string? Text { get; set; }
-    public List<BaseUIComponent> Items = [];
+    public bool RenderHeaderDiv { get; set; }
+    public bool RenderCoverContentDiv { get; set; }
+    public string? Name { get; set; }
+    public string? InlineStyle { get; set; }
+    public string? CssClass { get; set; }
+    public string? ComponentName { get; set; }
+    public string? DataSource { get; set; }
+    public List<int> SubPortalPageIDs { get; set; } = [];
+    public List<object> Items { get; set; } = [];
+    public abstract string? PortalPartType { get; }
+
 
     ////public PortalPartContainer(PortalPart portalPart, IWorkContext workContext, IApplicationService applicationService)
     ////{
@@ -66,11 +75,7 @@ public class PortalPartContainer : BaseUIComponent
 
     ////    return text;
     ////}
-    public bool RenderHeaderDiv { get; set; }
-    public bool RenderCoverContentDiv { get; set; }
-    public string? Name { get; set; }
-    public string? InlineStyle { get; set; }
-    public string? CssClass { get; set; }
+
     public int FindMaxTableolumnsInItems()
     {
         var maxTableColumn = 0;
@@ -87,14 +92,4 @@ public class PortalPartContainer : BaseUIComponent
         }
         return maxTableColumn;
     }
-
-    public HtmlViewModel? ViewModel { get; set; }
-}
-
-[Serializable]
-public class HtmlViewModel
-{
-    public string? DataSourceName { get; set; }
-    public bool IsBlankView { get; set; }
-    public IList? DataSource { get; set; }
 }

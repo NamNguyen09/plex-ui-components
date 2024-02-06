@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using Aspose.Words;
+using Plex.UIComponents.Dtos;
 
 namespace Plex.UIComponents.UIComponents;
 
@@ -11,8 +13,8 @@ public class Row : BaseUIComponent
     public string CssClass { get; set; }
     public string CellClass { get; set; }
     public string CellDocItemName { get; set; }
-    public List<Cell> Cells = [];
-    public Dictionary<string, string> Attributes = [];
+    public List<Cell> Cells { get; set; } = [];
+    public Dictionary<string, string> Attributes { get; set; } = [];
     public bool IsHeaderRow { get; set; }
     public Row()
     {
@@ -82,18 +84,18 @@ public class Row : BaseUIComponent
             stringBuilder.Append("</thead>");
         return stringBuilder.ToString();
     }
-    ////public void ToWord(DocumentBuilder documentBuilder, double pageWidth, 
-    ////    ICollection<DocumentItemDto> docItems, 
-    ////    double[] widths, int format)
-    ////{
-    ////    var i = 0;
-    ////    foreach (var oCell in Cells)
-    ////    {
-    ////        oCell.ToWord(documentBuilder, pageWidth, docItems, widths, i, format);
-    ////        i += oCell.Colspan;
-    ////    }
-    ////    documentBuilder.EndRow();
-    ////}
+    public void ToWord(DocumentBuilder documentBuilder, double pageWidth,
+        ICollection<DocumentItemDto> docItems,
+        double[] widths, int format)
+    {
+        var i = 0;
+        foreach (var oCell in Cells)
+        {
+            oCell.ToWord(documentBuilder, pageWidth, docItems, widths, i, format);
+            i += oCell.Colspan;
+        }
+        documentBuilder.EndRow();
+    }
     ////public void ToPpt(Presentation presentation, Slide slide, Aspose.Slides.Table pptTable, 
     ////    int rowIndex, ICollection<DocumentItemDto> docItems, double[] widths)
     ////{

@@ -2,10 +2,11 @@
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Plex.UIComponents.UIComponents;
 
-public static class StringExtentions
+public static class UIComponentExtentions
 {
     public static string RemoveHtmlTags(this string value)
     {
@@ -218,7 +219,7 @@ public static class StringExtentions
     {
         if (value.Contains("<") && value.Contains(">"))
         {
-            return Regex.Replace(value, @"<[^>]*>", String.Empty);
+            return Regex.Replace(value, @"<[^>]*>", string.Empty);
         }
 
         return value;
@@ -232,7 +233,7 @@ public static class StringExtentions
     /// <returns></returns>
     public static string Left(this string value, int length)
     {
-        return (string.IsNullOrEmpty(value) || length < 0 || length > value.Length)
+        return string.IsNullOrEmpty(value) || length < 0 || length > value.Length
             ? value
             : value.Substring(0, length);
     }
@@ -399,7 +400,7 @@ public static class StringExtentions
                 result = numValue >= minValue;
             }
 
-            if (string.IsNullOrEmpty(min) || (!string.IsNullOrEmpty(min) && result))
+            if (string.IsNullOrEmpty(min) || !string.IsNullOrEmpty(min) && result)
             {
                 //Maximum
                 if (!string.IsNullOrEmpty(max))
@@ -439,9 +440,9 @@ public static class StringExtentions
             var g2 = bgColor.G / 255.0;
             var b2 = bgColor.B / 255.0;
 
-            var r3 = ((1 - a) * r2) + (a * r1);
-            var g3 = ((1 - a) * g2) + (a * g1);
-            var b3 = ((1 - a) * b2) + (a * b1);
+            var r3 = (1 - a) * r2 + a * r1;
+            var g3 = (1 - a) * g2 + a * g1;
+            var b3 = (1 - a) * b2 + a * b1;
 
             var result = Color.FromArgb(Convert.ToInt32(r3 * 255), Convert.ToInt32(g3 * 255),
                                                                         Convert.ToInt32(b3 * 255));
@@ -483,7 +484,7 @@ public static class StringExtentions
 
         foreach (var word in words)
         {
-            var width = CalcWidth(word, false, minWidth);
+            var width = word.CalcWidth(false, minWidth);
             actualWidth = width > tmpWidth ? width : tmpWidth;
 
             tmpWidth = width;
@@ -551,7 +552,7 @@ public static class StringExtentions
 
     public static string MakeValidFileName(this string fileName, string replacingValue = "-")
     {
-        string invalidChars = Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
+        string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
         string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
         return Regex.Replace(fileName, invalidRegStr, replacingValue);
@@ -581,7 +582,7 @@ public static class StringExtentions
         {
             var alternativeCutOffs = new List<char> { ' ', ',', '.', '?', '/', ':', ';', '\'', '\"', '\'', '-' };
             var lastSpace = text1.LastIndexOf(' ');
-            if (lastSpace != -1 && (value.Length >= maxChars + 1 && !alternativeCutOffs.Contains(value.ToCharArray()[maxChars])))
+            if (lastSpace != -1 && value.Length >= maxChars + 1 && !alternativeCutOffs.Contains(value.ToCharArray()[maxChars]))
                 text1 = text1.Remove(lastSpace);
 
             char[] alternativeCutOffs2 = { ' ', '?', '/', ':', ';', '\'', '\"', '\'', '-' };
@@ -603,7 +604,7 @@ public static class StringExtentions
     public static Color GetForeColorFormColor(Color color)
     {
         var hexColor = ColorTranslator.ToHtml(color);
-        var newHexColor = GetForeColor(hexColor);
+        var newHexColor = hexColor.GetForeColor();
 
         return ColorTranslator.FromHtml(newHexColor);
     }
@@ -652,8 +653,8 @@ public static class StringExtentions
         float newb = 0;
         ConvertHsbtoRGB(foreColor.GetHue(), foreColor.GetSaturation(), fBrightness, ref newr, ref newg, ref newb);
 
-        foreColor = Color.FromArgb(foreColor.A, (int)(Math.Floor((newr * 255f))), (int)(Math.Floor((newg * 255f))),
-                                   (int)(Math.Floor((newb * 255f))));
+        foreColor = Color.FromArgb(foreColor.A, (int)Math.Floor(newr * 255f), (int)Math.Floor(newg * 255f),
+                                   (int)Math.Floor(newb * 255f));
     }
     public static string GetColorAdjustBrightness(this string hexCode, double factor)
     {
@@ -661,7 +662,7 @@ public static class StringExtentions
         var resColor = Color.FromArgb(color.A, Convert.ToInt32(color.R * factor), Convert.ToInt32(color.G * factor),
                                         Convert.ToInt32(color.B * factor));
 
-        return (ColorTranslator.ToHtml(resColor));
+        return ColorTranslator.ToHtml(resColor);
     }
     public static void ConvertHsbtoRGB(float h, float s, float v, ref float red, ref float green, ref float blue)
     {
@@ -681,7 +682,7 @@ public static class StringExtentions
 
             hue /= 60f;
 
-            var i = (int)(Math.Floor(Convert.ToDouble(hue)));
+            var i = (int)Math.Floor(Convert.ToDouble(hue));
             var f = hue - i;
             var p = v * (1f - s);
             var q = v * (1f - s * f);
@@ -728,5 +729,101 @@ public static class StringExtentions
                     // hue out of range 
             }
         }
+    }
+    public static int GetParamInt(this IDictionary<string, string> parameters, string name, int defaultValue = 0)
+    {
+        return parameters.ContainsKey(name.ToLower()) && IsNumeric(parameters[name.ToLower()])
+                   ? int.Parse(parameters[name.ToLower()])
+                   : defaultValue;
+    }
+    public static string GetParamString(this IDictionary<string, string> parameters, string name, string defaultValue = "")
+    {
+        return parameters.ContainsKey(name.ToLower()) ? parameters[name.ToLower()] : defaultValue;
+    }
+    public static List<int> GetParamIntList(this IDictionary<string, string> parameters, string name, string separator = ",")
+    {
+        string value = parameters.ContainsKey(name.ToLower()) ? parameters[name.ToLower()] : "";
+        if (string.IsNullOrEmpty(value) || value.Trim().Length < 0) return [];
+
+        var listInts = new List<int>();
+        var arrayInts = value.Split(Convert.ToChar(separator));
+        listInts.AddRange(from item in arrayInts
+                          where IsNumeric(item)
+                          select Convert.ToInt32(item));
+        return listInts;
+    }
+
+    public static List<string> GetParamStringList(this IDictionary<string, string> parameters, string name, string separator = ",")
+    {
+        string value = parameters.ContainsKey(name.ToLower()) ? parameters[name.ToLower()] : "";
+
+        if (string.IsNullOrEmpty(value) || value.Trim().Length < 0) return [];
+
+        var listStr = new List<string>();
+        var arrayInts = value.Split(Convert.ToChar(separator));
+        listStr.AddRange(from item in arrayInts
+                         select item);
+
+        return listStr;
+    }
+    public static IDictionary<string, string> ParseParameterSettings(this string? settings, bool decodeUri = true)
+    {
+        if (string.IsNullOrEmpty(settings)) return new Dictionary<string, string>();
+        var parameters = new Dictionary<string, string>();
+        settings = settings.UnescapeSettings(decodeUri);
+        var settingParameters = settings.Split('&');
+        foreach (var item in settingParameters)
+        {
+            var splitItem = item.Split('=');
+            var key = splitItem[0].ToLower();
+            if (splitItem.Length < 1 || parameters.ContainsKey(key)) continue;
+
+            var length = key.Length + 1;
+            parameters.Add(key, item.Substring(length, item.Length - length));
+        }
+
+        return parameters;
+    }
+    static string UnescapeSettings(this string settings, bool decodeUri = true)
+    {
+        var result = string.Empty;
+        if (!string.IsNullOrEmpty(settings))
+        {
+            result = settings;
+            result = result.Replace("<params>", "");
+            result = result.Replace("<params/>", "");
+            result = result.Replace("<params />", "");
+            result = result.Replace("</params>", "");
+            result = result.Replace("\r\n", "");
+            if (decodeUri)
+            {
+                result = Uri.UnescapeDataString(result);
+                result = HttpUtility.HtmlDecode(result);
+            }
+        }
+
+        return result;
+    }
+    static Boolean IsNumeric(Object expression)
+    {
+        if (expression == null || expression is DateTime)
+        {
+            return false;
+        }
+        if (expression is Int16 || expression is Int32 || expression is Int64 || expression is Decimal
+            || expression is Single || expression is Double || expression is Boolean)
+        {
+            return true;
+        }
+
+        double parseVal;
+        var isParse = double.TryParse(expression.ToString(), out parseVal);
+
+        if (isParse)
+            return true;
+
+        isParse = double.TryParse(expression?.ToString()?.Replace(".", ","), out parseVal);
+
+        return isParse;
     }
 }
